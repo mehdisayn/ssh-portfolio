@@ -1,98 +1,90 @@
+import React from "react";
+import {Box, Text} from "ink";
 
-import React from "react"
-import {Box,Text} from "ink"
+import Header from "./components/Header.jsx";
+import Portrait from "./components/Portrait.jsx";
+import Menu from "./components/Menu.jsx";
 
-import Header from "./components/Header.jsx"
-import Portrait from "./components/Portrait.jsx"
-import Menu from "./components/Menu.jsx"
+const Section = ({title, children}) => (
+	<Box flexDirection="column" marginTop={1}>
+		<Text bold color="cyan">
+			{title}
+		</Text>
+		<Box flexDirection="column" marginLeft={2} marginTop={0}>
+			{children}
+		</Box>
+	</Box>
+);
 
-export default function App(){
+const Bullet = ({children}) => (
+	<Text>
+		<Text color="magenta">• </Text>
+		{children}
+	</Text>
+);
 
-return(
+export default function App() {
+	return (
+		<Box flexDirection="column" paddingX={1}>
+			<Box flexDirection="row" gap={2}>
+				{/* Left */}
+				<Box width="50%" flexDirection="column">
+					<Portrait />
+				</Box>
 
-<Box flexDirection="column">
+				{/* Right */}
+				<Box width="50%" flexDirection="column">
+					<Header />
 
-<Box flexDirection="row">
+					<Box marginTop={1}>
+						<Text>
+							<Text dimColor>Meet </Text>
+							<Text bold color="green">
+								Syed Mehdi Hussain
+							</Text>
+							<Text dimColor> AKA </Text>
+							<Text bold color="yellow">
+								Mehdi Kazmi
+							</Text>
+							<Text dimColor>
+								. Developer, researcher, tech explorer and 
+								a multipotentialite as expected    
+							</Text>
+							<Text bold color="white">
+								 
+								. Email: m21gits@gmail.com
+							</Text>
+						</Text>
+					</Box>
 
-<Box width="50%">
-<Portrait/>
-</Box>
+					<Section title="What does he do?">
+						<Bullet>He plays. (With many things iykyk)</Bullet>
+					</Section>
 
-<Box width="50%" flexDirection="column">
+					<Section title="Is he cool?">
+						<Bullet>
+							Eh “is he cool?” bitch he is the word cool
+						</Bullet>
+					</Section>
 
-<Header/>
+					<Section title="Special skill?">
+						<Bullet>He can create anything with anything.</Bullet>
+						<Bullet>He can follow tutorial and make tutorial.</Bullet>
+						<Bullet>Complex linux BS? It’s a random Sunday for him.</Bullet>
+						<Bullet>Some people say “he is better than PewDiePie”.</Bullet>
+					</Section>
 
-<Text>
-Meet Syed Mehdi Hussain AKA Mehdi Kazmi. He is a developer,
-researcher and tech explorer.
-</Text>
+					<Section title="So what can’t he do?">
+						<Bullet>
+							wellllll, there is something……MATH  <Text color="red" bold>FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHH</Text>
+						</Bullet>
+					</Section>
+				</Box>
+			</Box>
 
-<Text>
-What does he do?
-</Text>
-
-<Text>
-- He plays. (With many things iykyk)
-</Text>
-
-<Text>
-
-</Text>
-
-<Text>
-Is he cool?
-</Text>
-
-<Text>
-- Eh "is he cool?" bitch he is the word cool
-</Text>
-
-<Text>
-
-</Text>
-
-<Text>
-Special skill?
-</Text>
-
-<Text>
-- He can create anything with anything.
-</Text>
-
-<Text>
-- He can follow tutorial and make tutorial
-</Text>
-
-<Text>
-- Complex linux BS? It's a random Sunday for him.
-</Text>
-
-
-<Text>
-- Some people say "he is better then PewDiePie"
-</Text>
-
-<Text>
-
-</Text>
-
-<Text>
-So what can't he do?
-</Text>
-
-<Text>
-- wellllll, there is something......MATHH
-</Text>
-
-</Box>
-
-</Box>
-
-<Menu/>
-
-</Box>
-
-)
-
+			<Box marginTop={1}>
+				<Menu />
+			</Box>
+		</Box>
+	);
 }
-
