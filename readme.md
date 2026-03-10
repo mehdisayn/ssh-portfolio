@@ -52,7 +52,7 @@ Navigation works with **arrow keys**.
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ssh-portfolio.git
+git clone https://github.com/mehdisayn/ssh-portfolio.git
 cd ssh-portfolio
 ```
 
@@ -446,3 +446,4 @@ Technology enthusiast exploring AI, systems, and digital culture.
 • a **demo GIF**
 • **screenshots section**
 • **GitHub badges (stars, license, Node version)**
+
