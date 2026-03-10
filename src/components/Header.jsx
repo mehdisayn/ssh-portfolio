@@ -10,4 +10,3 @@ const title = figlet.textSync("KAZMI", {
 export default function Header(){
  return <Text color="cyan">{title}</Text>
 }
-

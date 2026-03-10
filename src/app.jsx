@@ -1,3 +1,4 @@
+
 import React from "react"
 import {Box,Text} from "ink"
 
@@ -22,12 +23,65 @@ return(
 <Header/>
 
 <Text>
-Syed Mehedi Hussain is a developer,
-research enthusiast and technology explorer.
+Meet Syed Mehdi Hussain AKA Mehdi Kazmi. He is a developer,
+researcher and tech explorer.
 </Text>
 
 <Text>
-Exploring AI, systems and digital culture.
+What does he do?
+</Text>
+
+<Text>
+- He plays. (With many things iykyk)
+</Text>
+
+<Text>
+
+</Text>
+
+<Text>
+Is he cool?
+</Text>
+
+<Text>
+- Eh "is he cool?" bitch he is the word cool
+</Text>
+
+<Text>
+
+</Text>
+
+<Text>
+Special skill?
+</Text>
+
+<Text>
+- He can create anything with anything.
+</Text>
+
+<Text>
+- He can follow tutorial and make tutorial
+</Text>
+
+<Text>
+- Complex linux BS? It's a random Sunday for him.
+</Text>
+
+
+<Text>
+- Some people say "he is better then PewDiePie"
+</Text>
+
+<Text>
+
+</Text>
+
+<Text>
+So what can't he do?
+</Text>
+
+<Text>
+- wellllll, there is something......MATHH
 </Text>
 
 </Box>
@@ -41,3 +95,4 @@ Exploring AI, systems and digital culture.
 )
 
 }
+
