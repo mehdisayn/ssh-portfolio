@@ -21,7 +21,6 @@ client.on("session",(accept)=>{
 
 const session = accept()
 
-
 session.on("shell",(accept)=>{
 
 const stream = accept()
