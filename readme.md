@@ -1,449 +1,111 @@
+# SSH Portfolio
 
-# SSH Terminal Portfolio
+A terminal portfolio that lives on an SSH port. No browser. No HTML. You connect with `ssh`, and the connection itself is the interface — a React-rendered TUI streamed back over the channel.
 
-A **terminal-based portfolio website** accessible through **SSH**.
-Instead of visiting a website in a browser, users connect through the terminal and interact with a **TUI (Terminal User Interface)** built using **React + Ink**.
-
-The portfolio displays:
-
-* ASCII portrait
-* stylized header text
-* short bio
-* navigable sections (Creations, Reflections, Contacts)
-
----
-
-# Preview
-
-Example usage: for running localy
-
-go to the app folder
-
-```bash
-cd ssh-portfolio
-npm start
 ```
-
-open another terminal and command
-
-```bash
 ssh localhost -p 2222
 ```
 
-You will see something like:
+## Preview
 
 ```
-KAZMI
+  .;;:::''.                ███████╗███╗   ███╗██╗  ██╗
+ cdxxxoll;.                ██╔════╝████╗ ████║██║  ██║
+ OOkkkxxc'                 ███████╗██╔████╔██║███████║
+ 0K000OOd:'.    portrait   ╚════██║██║╚██╔╝██║██╔══██║
+ 0XXXXKK0Oxdolc:           ███████║██║ ╚═╝ ██║██║  ██║
+   .,;cloodxxkk            ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝
 
-Syed Mehedi Hussain is a developer,
-research enthusiast and technology explorer.
+                           Syed Mehedi Hussain
+                           full-stack developer · cs student
+                           syedmehedihussain@gmail.com
 
-Exploring AI, systems and digital culture.
+                           plays with many things, iykyk
 
-◆ Creations   Reflections   Contacts
+  ──────────────────────────────────────────────────────────
+   ◆ home    creations    skills    reflections    contacts
+  ──────────────────────────────────────────────────────────
+   ← →  switch    q  quit
 ```
 
-Navigation works with **arrow keys**.
+`←` `→` flip between tabs. On Creations, `↑` `↓` moves through the project list and the detail panel updates live. `q` quits.
 
----
-
-# Running the Project Locally
-
-## 1. Clone the Repository
+## Run locally
 
 ```bash
 git clone https://github.com/mehdisayn/ssh-portfolio.git
 cd ssh-portfolio
-```
-
----
-
-## 2. Install Dependencies
-
-```bash
 npm install
+npm start              # SSH server starts on port 2222
 ```
 
-Required dependencies include:
-
-* react
-* ink
-* ssh2
-* tsx (for running JSX directly)
-
----
-
-## 3. Start the SSH Server
-
-```bash
-npm start
-```
-
-or
-
-```bash
-npx tsx src/server.js
-```
-
-The server will start:
-
-```
-SSH portfolio running
-```
-
----
-
-## 4. Connect to the Portfolio
-
-Open another terminal and run:
+Then from another terminal:
 
 ```bash
 ssh localhost -p 2222
 ```
 
-You will now enter the **terminal portfolio interface**.
+The server prints `SSH portfolio running` when it's up. The host key (`host.key`) is committed so the first connection doesn't prompt for one; for a real deployment you'd generate your own.
 
----
+## Editing content
 
-# Project Structure
+Content is separated from layout. Edit these to change what visitors see — no JSX required:
 
-```
-ssh-portfolio
-│
-├── src
-│   ├── server.js        # SSH server
-│   ├── app.jsx          # Main UI layout
-│   │
-│   └── components
-│       ├── Header.jsx
-│       ├── Portrait.jsx
-│       └── Menu.jsx
-│
-├── host.key             # SSH host key
-├── package.json
-└── README.md
-```
+| File | What's in it |
+|---|---|
+| `src/data/projects.js` | Project list: `{ name, year, blurb, tech, link }` |
+| `src/data/skills.js` | Skill categories: `{ category, items[] }` |
+| `src/data/reflections.js` | Education + experience: `{ heading, lines[] }` |
+| `src/data/contacts.js` | Contact rows: `{ label, value }` |
+| `src/screens/Home.jsx` | Banner text, tagline, one-line bio (the home view itself) |
+| `assets/portrait.txt` | The ASCII portrait shown on home |
 
----
-
-# How the Project Works
-
-The system combines three main technologies:
-
-## 1. SSH Server
-
-The `ssh2` library creates an SSH server.
+## Project structure
 
 ```
-ssh localhost -p 2222
+ssh-portfolio/
+├── src/
+│   ├── server.js                 ssh2 server + Ink bootstrap
+│   ├── app.jsx                   router: holds the active tab, owns the menu
+│   ├── screens/
+│   │   ├── Home.jsx              portrait + banner + bio
+│   │   ├── Creations.jsx         project list + detail panel
+│   │   ├── Skills.jsx            skills grouped by category
+│   │   ├── Reflections.jsx       education + experience
+│   │   └── Contacts.jsx          label/value rows
+│   ├── components/
+│   │   ├── Header.jsx            figlet banner
+│   │   ├── Portrait.jsx          reads assets/portrait.txt
+│   │   ├── Menu.jsx              controlled, horizontal or vertical
+│   │   ├── ScreenShell.jsx       title bar + body for sub-screens
+│   │   └── Footer.jsx            keybind hint line
+│   └── data/                     content (see above)
+├── assets/
+│   └── portrait.txt              ASCII portrait
+├── host.key                      SSH host key
+└── package.json
 ```
 
-connects directly to the Node.js application.
+## Stack
 
----
+- Node 20
+- `ssh2` — SSH server
+- `ink` 6.x — React for the terminal
+- React 19
+- `figlet` — banner text
+- `tsx` — runs JSX without a build step
 
-## 2. Terminal UI (TUI)
+## How it works (the short version)
 
-Instead of HTML, the interface is built with **Ink**, a React renderer for the terminal.
+1. `ssh2` accepts a TCP connection on port 2222 and negotiates an SSH session.
+2. When the client requests a PTY and a shell, the server hands the data stream to Ink's `render()` as both `stdin` and `stdout`.
+3. Ink renders React components by writing ANSI escape sequences to that stream. The client's terminal interprets them.
+4. Keystrokes flow back through the stream and reach `useInput` hooks inside React components.
 
-Example:
+There are a few non-obvious adaptations in `server.js` — the SSH stream isn't a real PTY, so it needs stubs (`isTTY`, `setRawMode`, `ref`/`unref`), and `\n` has to be translated to `\r\n` because there's no kernel-level `ONLCR` to do it for us.
 
-```javascript
-<Box flexDirection="row">
-  <Text>Hello Terminal</Text>
-</Box>
-```
+## Author
 
-This behaves like **React components but rendered inside a terminal**.
+Syed Mehedi Hussain — Computer Science student at Independent University, Bangladesh.
 
----
-
-## 3. ASCII Interface
-
-The UI displays:
-
-* ASCII portrait
-* styled header text
-* interactive menu
-
-This creates a **terminal-native portfolio experience**.
-
----
-
-# Step-by-Step Guide to Build Your Own
-
-## Step 1 — Initialize Project
-
-```
-npm init -y
-```
-
-Install required packages:
-
-```
-npm install react ink ssh2
-npm install tsx --save-dev
-```
-
----
-
-## Step 2 — Create SSH Server
-
-Example server:
-
-```javascript
-import ssh2 from "ssh2"
-const { Server } = ssh2
-
-new Server({
- hostKeys:[fs.readFileSync("host.key")]
-}, client=>{
-
- client.on("authentication",ctx=>ctx.accept())
-
-}).listen(2222,"0.0.0.0")
-```
-
----
-
-## Step 3 — Create Ink Interface
-
-Use React components inside the terminal:
-
-```javascript
-import { Box, Text } from "ink"
-
-export default function App(){
- return(
-  <Box>
-   <Text>Hello SSH Portfolio</Text>
-  </Box>
- )
-}
-```
-
----
-
-## Step 4 — Render UI into SSH Stream
-
-The SSH connection stream is passed to Ink:
-
-```javascript
-render(React.createElement(App), { stdout: stream })
-```
-
----
-
-## Step 5 — Add Navigation
-
-Ink provides keyboard input support.
-
-Example:
-
-```javascript
-useInput((input,key)=>{
- if(key.leftArrow) moveLeft()
- if(key.rightArrow) moveRight()
-})
-```
-
----
-
-# Problems We Faced
-
-During development several issues occurred.
-
-### 1. Node.js ESM Import Errors
-
-```
-SyntaxError: Cannot use import statement outside a module
-```
-
-Cause: Node default module system conflict.
-
-Solution:
-
-```
-"type": "module"
-```
-
-added to `package.json`.
-
----
-
-### 2. JSX Execution Errors
-
-```
-Unexpected token '<'
-```
-
-Node cannot run JSX directly.
-
-Solution:
-
-Used **tsx** to execute JSX files.
-
-```
-npx tsx src/server.js
-```
-
----
-
-### 3. Ink Raw Mode Errors
-
-```
-Raw mode is not supported on stdin provided to Ink
-```
-
-Cause: incorrect terminal stream handling.
-
-Solution:
-
-Correctly attach the SSH stream to Ink:
-
-```javascript
-render(React.createElement(App), {
- stdout: stream,
- stdin: stream
-})
-```
-
----
-
-### 4. Duplicate React Keys
-
-```
-Encountered two children with the same key
-```
-
-Cause: incorrect key usage inside `.map()`.
-
-Solution:
-
-Use unique keys:
-
-```javascript
-<Text key={item}>
-```
-
-instead of
-
-```
-key={index}
-```
-
----
-
-### 5. ASCII Portrait Layout Issues
-
-ASCII output sometimes broke the UI.
-
-Solution:
-
-Controlled width using Ink layout:
-
-```
-<Box width="50%">
-```
-
----
-
-# Problems We Could Not Fully Solve
-
-Some issues remain partially unresolved:
-
-### Terminal Compatibility
-
-Different terminal emulators render ASCII differently.
-
-Some terminals distort layout.
-
----
-
-### Deployment Complexity
-
-Hosting SSH applications on cloud platforms is difficult because:
-
-* most platforms expect HTTP servers
-* TCP routing requires additional configuration
-
-This made deployment challenging.
-
----
-
-# What We Learned
-
-This project provided several insights.
-
-### Terminal UI Development
-
-Learned how **React can be used outside the browser**.
-
-Ink allows building full terminal applications.
-
----
-
-### SSH Protocol Basics
-
-Understanding how:
-
-* authentication
-* sessions
-* shells
-* streams
-
-work inside SSH connections.
-
----
-
-### Debugging Node Applications
-
-Encountered and solved multiple real-world issues involving:
-
-* module systems
-* runtime errors
-* stream handling
-* UI rendering
-
----
-
-### System Design Thinking
-
-This project required combining:
-
-```
-Networking
-+ Terminal UI
-+ React
-+ Node.js
-```
-
-into a working system.
-
----
-
-# Future Improvements
-
-Possible improvements include:
-
-* animated ASCII loading screen
-* command-based navigation
-* project viewer (`projects` command)
-* custom themes
-* global deployment
-
----
-
-# Author
-
-Syed Mehedi Hussain
-
-Computer Science Student
-Technology enthusiast exploring AI, systems, and digital culture.
-
-
-
-• a **demo GIF**
-• **screenshots section**
-• **GitHub badges (stars, license, Node version)**
-
+`syedmehedihussain@gmail.com` · [syedmehedihussain.codes](https://syedmehedihussain.codes) · [github.com/mehdisayn](https://github.com/mehdisayn)
