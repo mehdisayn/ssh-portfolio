@@ -8,35 +8,64 @@ import { render } from "ink"
 import App from "./app.jsx"
 
 new Server({
-
  hostKeys:[fs.readFileSync("host.key")]
-
 }, client=>{
 
-client.on("authentication",ctx=>ctx.accept())
+ client.on("error", err => console.error("client error:", err.message))
 
-client.on("ready",()=>{
+ client.on("authentication",ctx=>ctx.accept())
 
-client.on("session",(accept)=>{
+ client.on("ready",()=>{
 
-const session = accept()
+  client.on("session",(accept)=>{
 
-session.on("shell",(accept)=>{
+   const session = accept()
 
-const stream = accept()
+   let ptyInfo = null
+   session.on("pty",(accept,reject,info)=>{
+    ptyInfo = info
+    accept()
+   })
 
+   session.on("shell",(accept)=>{
 
+    const stream = accept()
 
-render(React.createElement(App), { stdout: stream})
+    stream.isTTY = true
+    stream.columns = ptyInfo?.cols ?? 120
+    stream.rows = ptyInfo?.rows ?? 40
+    stream.setRawMode = () => true
+    stream.ref = () => {}
+    stream.unref = () => {}
 
-})
+    const instance = render(React.createElement(App), {
+     stdout: stream,
+     stdin: stream,
+     patchConsole: false
+    })
 
-})
+    const cleanup = () => {
+     try { instance.unmount() } catch {}
+     try { stream.end() } catch {}
+    }
 
-})
+    stream.on("error", cleanup)
+    stream.on("close", cleanup)
+
+    session.on("window-change",(a,r,info)=>{
+     stream.columns = info.cols
+     stream.rows = info.rows
+     stream.emit("resize")
+    })
+
+   })
+
+  })
+
+ })
 
 }).listen(2222,"0.0.0.0",()=>{
 
-console.log("SSH portfolio running")
+ console.log("SSH portfolio running")
 
 })

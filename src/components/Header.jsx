@@ -3,7 +3,7 @@ import React from "react"
 import { Text } from "ink"
 import figlet from "figlet"
 
-const title = figlet.textSync("KAZMI", {
+const title = figlet.textSync("SAYNFFS", {
  font: "ANSI Shadow"
 })
 
