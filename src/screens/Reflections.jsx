@@ -5,7 +5,7 @@ import reflections from "../data/reflections.js"
 
 export default function Reflections() {
   return (
-    <ScreenShell title="reflections" hints="esc  back    q  quit">
+    <ScreenShell title="reflections">
       {reflections.map(section => (
         <Box key={section.heading} flexDirection="column" marginBottom={1}>
           <Text bold color="cyan">{section.heading}</Text>

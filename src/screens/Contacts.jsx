@@ -5,7 +5,7 @@ import contacts from "../data/contacts.js"
 
 export default function Contacts() {
   return (
-    <ScreenShell title="contacts" hints="esc  back    q  quit">
+    <ScreenShell title="contacts">
       {contacts.map(row => (
         <Box key={row.label}>
           <Box width={12}>

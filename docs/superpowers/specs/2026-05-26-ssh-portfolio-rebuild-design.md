@@ -22,13 +22,13 @@ Local-only for this milestone. Hosting is a later concern.
 
 | Field | Value |
 |---|---|
-| Display handle | `SAYNFFS` |
+| Display handle | `Syed Mehedi Hussain` |
 | Email | `syedmehedihussain@gmail.com` |
 | Web | `syedmehedihussain.codes` |
 | Banner font | figlet ANSI Shadow |
 | Tone | dry, playful, terse |
 
-The real name "Syed Mehedi Hussain" is **not** displayed anywhere in the UI.
+
 
 ## Architecture
 
@@ -63,7 +63,7 @@ Neofetch-style. Portrait on the left in a fixed-width column (widest line of `po
  \        /           ██║  ██╗██║  ██║███████╗██║ ╚═╝ ██║██║
   '-....-'            ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝
 
-                      saynffs
+                      Syed Mehedi Hussain
                       developer · researcher · tech explorer
                       syedmehedihussain@gmail.com
 
@@ -75,7 +75,7 @@ Neofetch-style. Portrait on the left in a fixed-width column (widest line of `po
    ← →  move    enter  open    q  quit
 ```
 
-The figlet banner shows `SAYNFFS` (not `KAZMI`). The "plays with many things, iykyk" line is the single personality taste on the home screen; the longer riffs live in Reflections.
+The figlet banner shows `Syed Mehedi Hussain`). The "plays with many things, iykyk" line is the single personality taste on the home screen; the longer riffs live in Reflections.
 
 Keys: `←` `→` move the menu cursor, `Enter` opens the selected screen, `q` quits.
 
@@ -145,8 +145,8 @@ Four label/value rows.
  ── saynffs · contacts ─────────────────────────────────────
 
    email      syedmehedihussain@gmail.com
-   github     github.com/<placeholder>
-   linkedin   linkedin.com/in/<placeholder>
+   github     github.com/mehdisayn
+   linkedin   linkedin.com/in/syedmehedihussain
    web        syedmehedihussain.codes
 
  ───────────────────────────────────────────────────────────

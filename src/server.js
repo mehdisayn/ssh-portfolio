@@ -38,6 +38,17 @@ new Server({
     stream.ref = () => {}
     stream.unref = () => {}
 
+    const _write = stream.write.bind(stream)
+    stream.write = (chunk, ...rest) => {
+     if (typeof chunk === "string") {
+      return _write(chunk.replace(/\r?\n/g, "\r\n"), ...rest)
+     }
+     if (Buffer.isBuffer(chunk)) {
+      return _write(Buffer.from(chunk.toString("utf8").replace(/\r?\n/g, "\r\n"), "utf8"), ...rest)
+     }
+     return _write(chunk, ...rest)
+    }
+
     const instance = render(React.createElement(App), {
      stdout: stream,
      stdin: stream,

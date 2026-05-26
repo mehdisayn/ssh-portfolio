@@ -15,13 +15,16 @@ export default function Creations() {
   const current = projects[index]
 
   return (
-    <ScreenShell title="creations" hints="↑ ↓  pick    esc  back    q  quit">
+    <ScreenShell title="creations">
       <Box flexDirection="row" gap={2}>
         <Box width="35%">
           <Menu items={projects} index={index} orientation="vertical" />
         </Box>
         <Box flexDirection="column" width="65%">
-          <Text bold>{current.name}</Text>
+          <Box>
+            <Text bold>{current.name}</Text>
+            {current.year ? <Text dimColor>  ·  {current.year}</Text> : null}
+          </Box>
           <Box marginTop={1}>
             <Text>{current.blurb}</Text>
           </Box>
